@@ -8,6 +8,8 @@ import { loadStripe } from '@stripe/stripe-js';
 
 
 const CheckOut = () => {
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:7000";
+    console.log(backendUrl);
     const [noItem, setNoItem] = useState(true);
     const todos = useSelector(state => state.todos);
     const total = useSelector(state => state.total);
@@ -22,7 +24,7 @@ const CheckOut = () => {
 
     const makePayment = async () => {
         if (todos.length <= 0) {
-            setNoItem(false);
+            setNoItem(false); 
         } else {
             const stripe = await loadStripe('pk_test_51OGxqwSA044I0aiRpRCMVCGk0VeAYyhybbgwkBpFRGbolXWFBtG6oxeyTDag0dM82AOEoNEGdJgduiyZuU1lncCG00SO8lhq8S');
             const body = {
@@ -31,7 +33,7 @@ const CheckOut = () => {
             const headers = {
                 "content-type": "application/json"
             }
-            const response = await fetch("http://localhost:7000/api/create-checkout-session", {
+            const response = await fetch(`${backendUrl}/api/create-checkout-session`, {
                 method: "POST",
                 headers: headers,
                 body: JSON.stringify(body)
